@@ -142,11 +142,20 @@
   <data name="Kugel_Blau" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Kugel_Blau.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Kugel_Blau_Durchsichtig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Kugel_Blau_Durchsichtig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Kugel_Grün" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Kugel_Grün.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Kugel_Grün_Durchsichtig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Kugel_Grün_Durchsichtig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Kugel_Rot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Kugel_Rot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Kugel_Rot_Durchsichtig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Kugel_Rot_Durchsichtig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Leer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Leer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -156,6 +165,9 @@
   </data>
   <data name="Mauer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Mauer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Missing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Missing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Pfütze_Blau" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pfütze_Blau.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

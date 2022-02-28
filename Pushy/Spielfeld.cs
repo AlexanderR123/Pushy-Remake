@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Serialization;
+
 
 namespace Pushy
 {
@@ -46,6 +48,7 @@ namespace Pushy
         Knopf_Mauer_Kugel_Blau =    0b0010000100100000,
         Knopf_Mauer_Kugel_Grün =    0b0010001000100000,
         Knopf_Mauer_Kiste =         0b0010000000010000,
+        Taboo =                     0b0100000000000000,
 
     }
 
@@ -82,6 +85,7 @@ namespace Pushy
                     {
                         LoadLevelInfo(LevelInfo);
                         _Level = value;
+                        InvalidateVisual();
                     }
                 }
             }
@@ -95,6 +99,88 @@ namespace Pushy
             Level = 1;
         }
 
+
+        private BitmapSource GetImage(FeldTyp pFeldTyp, bool pImage = false)
+        {
+            Bitmap bmp;
+
+            switch (pFeldTyp)
+            {
+                case FeldTyp.Leer:
+                    bmp = Pushy.Properties.Resources.Leer;
+                    break;
+                case FeldTyp.Mauer:
+                    bmp = Pushy.Properties.Resources.Mauer;
+                    break;
+                case FeldTyp.Ziel:
+                    bmp = Pushy.Properties.Resources.Ziel;
+                    break;
+                case FeldTyp.Kiste:
+                case FeldTyp.Knopf_Kiste:
+                case FeldTyp.Knopf_Mauer_Kiste:
+                    bmp = Pushy.Properties.Resources.Kiste;
+                    break;
+                case FeldTyp.Pfütze_Rot:
+                    bmp = Pushy.Properties.Resources.Pfütze_Rot;
+                    break;
+                case FeldTyp.Pfütze_Blau:
+                    bmp = Pushy.Properties.Resources.Pfütze_Blau;
+                    break;
+                case FeldTyp.Pfütze_Grün:
+                    bmp = Pushy.Properties.Resources.Pfütze_Grün;
+                    break;
+                case FeldTyp.Kugel_Rot:
+                    bmp = Pushy.Properties.Resources.Kugel_Rot;
+                    break;
+                case FeldTyp.Knopf_Kugel_Rot:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Rot_Durchsichtig);
+                    break;
+                case FeldTyp.Knopf_Mauer_Kugel_Rot:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Rot_Durchsichtig);
+                    break;
+                case FeldTyp.Kugel_Blau:
+                    bmp = Pushy.Properties.Resources.Kugel_Blau;
+                    break;
+                case FeldTyp.Knopf_Kugel_Blau:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Blau_Durchsichtig);
+                    break;
+                case FeldTyp.Knopf_Mauer_Kugel_Blau:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Blau_Durchsichtig);
+                    break;
+                case FeldTyp.Kugel_Grün:
+                    bmp = Pushy.Properties.Resources.Kugel_Grün;
+                    break;
+                case FeldTyp.Knopf_Kugel_Grün:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Grün_Durchsichtig);
+                    break;
+                case FeldTyp.Knopf_Mauer_Kugel_Grün:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Grün_Durchsichtig);
+                    break;
+                case FeldTyp.Klecks_Rot:
+                    bmp = Pushy.Properties.Resources.Klecks_Rot;
+                    break;
+                case FeldTyp.Klecks_Blau:
+                    bmp = Pushy.Properties.Resources.Klecks_Blau;
+                    break;
+                case FeldTyp.Klecks_Grün:
+                    bmp = Pushy.Properties.Resources.Klecks_Grün;
+                    break;
+                case FeldTyp.Teleporter:
+                    bmp = Pushy.Properties.Resources.Teleporter;
+                    break;
+                case FeldTyp.Knopf:
+                    bmp = Pushy.Properties.Resources.Knopf;
+                    break;
+                case FeldTyp.Knopf_Mauer:
+                    bmp = Knopf ? Pushy.Properties.Resources.Knopf_Mauer_Aktiv : Pushy.Properties.Resources.Knopf_Mauer;
+                    break;
+                default:
+                    bmp = Pushy.Properties.Resources.Missing;
+                    break;
+            }
+
+            return bmp.ToBitmapSource();
+        }
 
         public Bitmap ZeichneFeld()
         {
@@ -135,18 +221,24 @@ namespace Pushy
                                 break;
                             case (int)FeldTyp.Kugel_Rot:
                             case (int)FeldTyp.Knopf_Kugel_Rot:
-                            case (int)FeldTyp.Knopf_Mauer_Kugel_Rot:
                                 image = Pushy.Properties.Resources.Kugel_Rot;
+                                break;
+                            case (int)FeldTyp.Knopf_Mauer_Kugel_Rot:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Rot);
                                 break;
                             case (int)FeldTyp.Kugel_Blau:
                             case (int)FeldTyp.Knopf_Kugel_Blau:
-                            case (int)FeldTyp.Knopf_Mauer_Kugel_Blau:
                                 image = Pushy.Properties.Resources.Kugel_Blau;
+                                break;
+                            case (int)FeldTyp.Knopf_Mauer_Kugel_Blau:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Blau);
                                 break;
                             case (int)FeldTyp.Kugel_Grün:
                             case (int)FeldTyp.Knopf_Kugel_Grün:
-                            case (int)FeldTyp.Knopf_Mauer_Kugel_Grün:
                                 image = Pushy.Properties.Resources.Kugel_Grün;
+                                break;
+                            case (int)FeldTyp.Knopf_Mauer_Kugel_Grün:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Grün);
                                 break;
                             case (int)FeldTyp.Klecks_Rot:
                                 image = Pushy.Properties.Resources.Klecks_Rot;
@@ -164,10 +256,7 @@ namespace Pushy
                                 image = Pushy.Properties.Resources.Knopf;
                                 break;
                             case (int)FeldTyp.Knopf_Mauer:
-                                if(Knopf)
-                                    image = Pushy.Properties.Resources.Knopf_Mauer_Aktiv;
-                                else
-                                    image = Pushy.Properties.Resources.Knopf_Mauer;
+                                image = Knopf ? Pushy.Properties.Resources.Knopf_Mauer_Aktiv : Pushy.Properties.Resources.Knopf_Mauer;
                                 break;
                             default:
                                 image = Pushy.Properties.Resources.Leer;
@@ -247,6 +336,7 @@ namespace Pushy
             }
 
 
+            InvalidateVisual();
         }
 
 
@@ -271,6 +361,9 @@ namespace Pushy
             {
                 for (int j = 0; j < 20; j++)
                 {
+                    if ((Feld[i, j] & (int)FeldTyp.Kugel) > 0)
+                        return false;
+
                     switch (Feld[i, j])
                     {
                         case (int)FeldTyp.Kugel_Blau:
@@ -307,7 +400,7 @@ namespace Pushy
             {
                 if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] ) == (int)FeldTyp.Knopf)
                     return true;
-                else
+                else if((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
                 {
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ~(int)FeldTyp.Knopf;
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Knopf;
@@ -319,7 +412,7 @@ namespace Pushy
             {
                 if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer && Knopf)
                     return true;
-                else if((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X]) != (int)FeldTyp.Knopf_Mauer)
+                else if((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
                 {
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ~(int)FeldTyp.Knopf_Mauer;
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Knopf_Mauer;
@@ -335,14 +428,14 @@ namespace Pushy
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = tmp;
                     return true;
                 }
-                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Knopf)) == (int)FeldTyp.Knopf)
+                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf)
                 {
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += (int)FeldTyp.Kiste;
                     Knopf = true;
                     return true;
                 }
-                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Knopf_Mauer)) == (int)FeldTyp.Knopf_Mauer && Knopf)
+                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer && Knopf)
                 {
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += (int)FeldTyp.Kiste;
@@ -375,7 +468,7 @@ namespace Pushy
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
                     return true;
                 }
-                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Knopf)) == (int)FeldTyp.Knopf)
+                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf)
                 {
                     int Klecks = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
                     int Farbe = (Klecks & (int)FeldTyp.Rot) | (Klecks & (int)FeldTyp.Blau) | (Klecks & (int)FeldTyp.Grün);
@@ -384,7 +477,7 @@ namespace Pushy
                     Knopf = true;
                     return true;
                 }
-                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Knopf_Mauer)) == (int)FeldTyp.Knopf_Mauer && Knopf)
+                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] ) == (int)FeldTyp.Knopf_Mauer && Knopf)
                 {
                     int Klecks = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
                     int Farbe = (Klecks & (int)FeldTyp.Rot) | (Klecks & (int)FeldTyp.Blau) | (Klecks & (int)FeldTyp.Grün);
@@ -413,6 +506,7 @@ namespace Pushy
 
             PushyLooking = LevelInfo.PushyLooking;
             PushyPoint = LevelInfo.PushyPoint;
+            Knopf = false;
         }
 
 
@@ -446,42 +540,34 @@ namespace Pushy
         {
             base.OnRender(drawingContext);
 
-            /*
 
-            //Draw horizontal line from startPoint to endPoint
-            drawingContext.DrawLine(mainPen, new Point(startPoint, ActualHeight / 2),
-                                             new Point(endPoint, ActualHeight / 2));
-
-            // Draw ticks and text
-            for (double i = 0.0; i <= endPoint; i++)
+            for (int i = 0; i < 12; i++)
             {
-                if (i % 50 == 0)
+                for (int j = 0; j < 20; j++)
                 {
-                    // Draw vertical ticks on the horizontal line drawn above.
-                    // They are spaced apart by 50 pixels.
-                    drawingContext.DrawLine(mainPen, new Point(i, ActualHeight / 2),
-                                                     new Point(i, ActualHeight / 1.25));
-
-                    // Draw text below every tick
-                    FormattedText ft = new FormattedText(
-                       (i).ToString(CultureInfo.CurrentCulture),
-                                    CultureInfo.CurrentCulture,
-                                    FlowDirection.LeftToRight,
-                                    new Typeface(new FontFamily("Segoe UI"),
-                                        FontStyles.Normal,
-                                        FontWeights.Normal,
-                                        FontStretches.Normal),
-                                    12,
-                                    Brushes.Black,
-                                    null,
-                                    TextFormattingMode.Display);
-
-                    drawingContext.DrawText(ft, new Point(i, ActualHeight / 1.2));
-
+                    drawingContext.DrawImage(GetImage((FeldTyp)Feld[i, j]), new Rect(j * 32, i * 32, 32, 32));
                 }
             }
 
-            */
+            switch (PushyLooking)
+            {
+                case Pushy.Move.Up:
+                    drawingContext.DrawImage(Pushy.Properties.Resources.PushyUp.ToBitmapSource(), new Rect(PushyPoint.X * 32, PushyPoint.Y * 32, 32, 32));
+                    break;
+                case Pushy.Move.Right:
+                    drawingContext.DrawImage(Pushy.Properties.Resources.PushyRight.ToBitmapSource(), new Rect(PushyPoint.X * 32, PushyPoint.Y * 32, 32, 32));
+                    break;
+                case Pushy.Move.Down:
+                    drawingContext.DrawImage(Pushy.Properties.Resources.PushyDown.ToBitmapSource(), new Rect(PushyPoint.X * 32, PushyPoint.Y * 32, 32, 32));
+                    break;
+                case Pushy.Move.Left:
+                    drawingContext.DrawImage(Pushy.Properties.Resources.PushyLeft.ToBitmapSource(), new Rect(PushyPoint.X * 32, PushyPoint.Y * 32, 32, 32));
+                    break;
+            }
+
+
+
+
         }
 
         #endregion

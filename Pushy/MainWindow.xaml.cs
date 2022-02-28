@@ -24,22 +24,16 @@ namespace Pushy
     /// </summary>
     public partial class MainWindow : Window
     {
-        Spielfeld _Spielfeld;
-
-
         public MainWindow()
         {
-
-            _Spielfeld = Pushy.Spielfeld.Level1;
-
             //https://www.youtube.com/watch?v=abIStsPhqZY
             InitializeComponent();
 
-            DrawImage();
+
+            //DrawImage();
 
 
 
-            
         }
 
 
@@ -48,7 +42,7 @@ namespace Pushy
         {
             using (MemoryStream memory = new MemoryStream())
             {
-                _Spielfeld.ZeichneFeld().Save(memory, ImageFormat.Png);
+                Spielfeld.ZeichneFeld().Save(memory, ImageFormat.Png);
                 memory.Position = 0;
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.BeginInit();
@@ -56,7 +50,7 @@ namespace Pushy
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.EndInit();
 
-                Spielfeld.Source = bitmapImage;
+                Spielfeld1.Source = bitmapImage;
             }
 
         }
@@ -67,23 +61,23 @@ namespace Pushy
             switch(e.Key)
             {
                 case Key.W:
-                    _Spielfeld.Move(Move.Up);
+                    Spielfeld.Move(Move.Up);
                     DrawImage();
                     break;
                 case Key.D:
-                    _Spielfeld.Move(Move.Right);
+                    Spielfeld.Move(Move.Right);
                     DrawImage();
                     break;
                 case Key.S:
-                    _Spielfeld.Move(Move.Down);
+                    Spielfeld.Move(Move.Down);
                     DrawImage();
                     break;
                 case Key.A:
-                    _Spielfeld.Move(Move.Left);
+                    Spielfeld.Move(Move.Left);
                     DrawImage();
                     break;
                 case Key.N:
-                    _Spielfeld.Level++;
+                    Spielfeld.Level++;
                     DrawImage();
                     break;
             }
@@ -93,7 +87,7 @@ namespace Pushy
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _Spielfeld.Level = _Spielfeld.Level;
+            Spielfeld.Level = Spielfeld.Level;
             DrawImage();
         }
 
@@ -101,7 +95,7 @@ namespace Pushy
         {
             try
             {
-                _Spielfeld.Level = Convert.ToInt32(LVL.Text);
+                Spielfeld.Level = Convert.ToInt32(LVL.Text);
                 DrawImage();
             }
             catch (Exception ex)

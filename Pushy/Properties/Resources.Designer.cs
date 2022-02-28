@@ -143,6 +143,16 @@ namespace Pushy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Kugel_Blau_Durchsichtig {
+            get {
+                object obj = ResourceManager.GetObject("Kugel_Blau_Durchsichtig", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Kugel_Grün {
             get {
                 object obj = ResourceManager.GetObject("Kugel_Grün", resourceCulture);
@@ -153,9 +163,29 @@ namespace Pushy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Kugel_Grün_Durchsichtig {
+            get {
+                object obj = ResourceManager.GetObject("Kugel_Grün_Durchsichtig", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Kugel_Rot {
             get {
                 object obj = ResourceManager.GetObject("Kugel_Rot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Kugel_Rot_Durchsichtig {
+            get {
+                object obj = ResourceManager.GetObject("Kugel_Rot_Durchsichtig", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -186,6 +216,16 @@ namespace Pushy.Properties {
         internal static System.Drawing.Bitmap Mauer {
             get {
                 object obj = ResourceManager.GetObject("Mauer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Missing {
+            get {
+                object obj = ResourceManager.GetObject("Missing", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
