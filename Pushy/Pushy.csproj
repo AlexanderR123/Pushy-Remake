@@ -8,10 +8,91 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Level\Level_0.lvl" />
+    <None Remove="Level\Level_1.lvl" />
+    <None Remove="Level\Level_10.lvl" />
+    <None Remove="Level\Level_11.lvl" />
+    <None Remove="Level\Level_12.lvl" />
+    <None Remove="Level\Level_13.lvl" />
+    <None Remove="Level\Level_14.lvl" />
+    <None Remove="Level\Level_15.lvl" />
+    <None Remove="Level\Level_16.lvl" />
+    <None Remove="Level\Level_17.lvl" />
+    <None Remove="Level\Level_18.lvl" />
+    <None Remove="Level\Level_19.lvl" />
+    <None Remove="Level\Level_2.lvl" />
+    <None Remove="Level\Level_20.lvl" />
+    <None Remove="Level\Level_21.lvl" />
+    <None Remove="Level\Level_22.lvl" />
+    <None Remove="Level\Level_23.lvl" />
+    <None Remove="Level\Level_24.lvl" />
+    <None Remove="Level\Level_25.lvl" />
+    <None Remove="Level\Level_26.lvl" />
+    <None Remove="Level\Level_27.lvl" />
+    <None Remove="Level\Level_28.lvl" />
+    <None Remove="Level\Level_29.lvl" />
+    <None Remove="Level\Level_3.lvl" />
+    <None Remove="Level\Level_30.lvl" />
+    <None Remove="Level\Level_31.lvl" />
+    <None Remove="Level\Level_32.lvl" />
+    <None Remove="Level\Level_33.lvl" />
+    <None Remove="Level\Level_34.lvl" />
+    <None Remove="Level\Level_35.lvl" />
+    <None Remove="Level\Level_36.lvl" />
+    <None Remove="Level\Level_37.lvl" />
+    <None Remove="Level\Level_4.lvl" />
+    <None Remove="Level\Level_5.lvl" />
+    <None Remove="Level\Level_6.lvl" />
+    <None Remove="Level\Level_7.lvl" />
+    <None Remove="Level\Level_8.lvl" />
+    <None Remove="Level\Level_9.lvl" />
     <None Remove="Resources\Level_1.lvl" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Level\Level_1.lvl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Level\Level_0.lvl">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Level\Level_10.lvl" />
+    <EmbeddedResource Include="Level\Level_11.lvl" />
+    <EmbeddedResource Include="Level\Level_12.lvl" />
+    <EmbeddedResource Include="Level\Level_13.lvl" />
+    <EmbeddedResource Include="Level\Level_14.lvl" />
+    <EmbeddedResource Include="Level\Level_15.lvl" />
+    <EmbeddedResource Include="Level\Level_16.lvl" />
+    <EmbeddedResource Include="Level\Level_17.lvl" />
+    <EmbeddedResource Include="Level\Level_18.lvl" />
+    <EmbeddedResource Include="Level\Level_19.lvl" />
+    <EmbeddedResource Include="Level\Level_2.lvl" />
+    <EmbeddedResource Include="Level\Level_20.lvl" />
+    <EmbeddedResource Include="Level\Level_21.lvl" />
+    <EmbeddedResource Include="Level\Level_22.lvl" />
+    <EmbeddedResource Include="Level\Level_23.lvl" />
+    <EmbeddedResource Include="Level\Level_24.lvl" />
+    <EmbeddedResource Include="Level\Level_25.lvl" />
+    <EmbeddedResource Include="Level\Level_26.lvl" />
+    <EmbeddedResource Include="Level\Level_27.lvl" />
+    <EmbeddedResource Include="Level\Level_28.lvl" />
+    <EmbeddedResource Include="Level\Level_29.lvl" />
+    <EmbeddedResource Include="Level\Level_3.lvl" />
+    <EmbeddedResource Include="Level\Level_30.lvl" />
+    <EmbeddedResource Include="Level\Level_31.lvl" />
+    <EmbeddedResource Include="Level\Level_32.lvl" />
+    <EmbeddedResource Include="Level\Level_33.lvl" />
+    <EmbeddedResource Include="Level\Level_34.lvl" />
+    <EmbeddedResource Include="Level\Level_35.lvl" />
+    <EmbeddedResource Include="Level\Level_36.lvl" />
+    <EmbeddedResource Include="Level\Level_37.lvl" />
+    <EmbeddedResource Include="Level\Level_4.lvl" />
+    <EmbeddedResource Include="Level\Level_5.lvl" />
+    <EmbeddedResource Include="Level\Level_6.lvl" />
+    <EmbeddedResource Include="Level\Level_7.lvl" />
+    <EmbeddedResource Include="Level\Level_8.lvl" />
+    <EmbeddedResource Include="Level\Level_9.lvl" />
     <EmbeddedResource Include="Resources\Level_1.lvl" />
   </ItemGroup>
 

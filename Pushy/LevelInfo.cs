@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -59,12 +60,21 @@ namespace Pushy
         {
             LevelInfo LevelInfo = new LevelInfo();
 
+
             try
             {
-                XmlSerializer xs = new XmlSerializer(typeof(LevelInfo));
-                MemoryStream memoryStream = new MemoryStream(File.ReadAllBytes($"Level/Level_{Id}.lvl"));
-                XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
-                LevelInfo = (LevelInfo)xs.Deserialize(memoryStream);
+                var assembly = Assembly.GetExecutingAssembly();
+
+                string lResult;
+                using (Stream lStream = assembly.GetManifestResourceStream($"Pushy.Level.Level_{Id}.lvl"))
+                using (StreamReader lStreamReader = new StreamReader(lStream))
+                {
+                    lResult = lStreamReader.ReadToEnd();
+                }
+
+                using TextReader lTextReader = new StringReader(lResult);
+                LevelInfo = (LevelInfo)new XmlSerializer(typeof(LevelInfo)).Deserialize(lTextReader);
+
             }
             catch (Exception e)
             {
