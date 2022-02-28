@@ -346,7 +346,7 @@ namespace Pushy
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    if(Feld[i, j] == (int)FeldTyp.Teleporter && PushyPoint.X != j && PushyPoint.Y != i)
+                    if(Feld[i, j] == (int)FeldTyp.Teleporter && !(PushyPoint.X == j && PushyPoint.Y == i))
                     {
                         PushyPoint = new System.Drawing.Point(j, i);
                         return;
