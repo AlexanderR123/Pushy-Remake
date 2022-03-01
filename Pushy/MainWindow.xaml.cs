@@ -80,6 +80,10 @@ namespace Pushy
                     Spielfeld.Level++;
                     DrawImage();
                     break;
+                case Key.R:
+                    Spielfeld.Level = Spielfeld.Level;
+                    DrawImage();
+                    break;
             }
 
 

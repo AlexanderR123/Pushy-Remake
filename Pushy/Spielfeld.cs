@@ -67,11 +67,13 @@ namespace Pushy
 
         public int[,] Feld;
        
-        public System.Drawing.Point PushyPoint;
+        public Pushy.Point PushyPoint;
 
         public Move PushyLooking;
 
         public bool Knopf = false;
+
+        public bool Taboo = false;
 
         public int Level
         {
@@ -80,7 +82,7 @@ namespace Pushy
             {
                 if (value > 0)
                 {
-                    LevelInfo LevelInfo = LevelInfo.LoadById(value);
+                    LevelInfo? LevelInfo = LevelInfo.LoadById(value);
                     if (LevelInfo is not null)
                     {
                         LoadLevelInfo(LevelInfo);
@@ -94,7 +96,7 @@ namespace Pushy
         public Spielfeld()
         {
             Feld = new int[12, 20];
-            PushyPoint = new System.Drawing.Point(0,0); 
+            PushyPoint = new Pushy.Point(0,0); 
             PushyLooking = Pushy.Move.Up;
             Level = 1;
         }
@@ -173,6 +175,9 @@ namespace Pushy
                     break;
                 case FeldTyp.Knopf_Mauer:
                     bmp = Knopf ? Pushy.Properties.Resources.Knopf_Mauer_Aktiv : Pushy.Properties.Resources.Knopf_Mauer;
+                    break;
+                case FeldTyp.Taboo:
+                    bmp = Pushy.Properties.Resources.Taboo;
                     break;
                 default:
                     bmp = Pushy.Properties.Resources.Missing;
@@ -259,7 +264,7 @@ namespace Pushy
                                 image = Knopf ? Pushy.Properties.Resources.Knopf_Mauer_Aktiv : Pushy.Properties.Resources.Knopf_Mauer;
                                 break;
                             default:
-                                image = Pushy.Properties.Resources.Leer;
+                                image = Pushy.Properties.Resources.Missing;
                                 break;
                         }
                         g.DrawImage(image, j * 32, i * 32, 32, 32);
@@ -295,25 +300,25 @@ namespace Pushy
             switch (lMove)
             {
                 case Pushy.Move.Up:
-                    if(CanIGo(PushyPoint, new System.Drawing.Point(0, -1),lMove))
+                    if(CanIGo(PushyPoint, new Pushy.Point(0, -1),lMove))
                         PushyPoint.Y -= 1;
                    // else
                     //    PushyPoint.Y -= 1;
                     break;
                 case Pushy.Move.Right:
-                    if (CanIGo(PushyPoint, new System.Drawing.Point(1, 0), lMove))
+                    if (CanIGo(PushyPoint, new Pushy.Point(1, 0), lMove))
                         PushyPoint.X += 1;
                   //  else
                    //     PushyPoint.X += 1;
                     break;
                 case Pushy.Move.Down:
-                    if (CanIGo(PushyPoint, new System.Drawing.Point(0, 1), lMove))
+                    if (CanIGo(PushyPoint, new Pushy.Point(0, 1), lMove))
                         PushyPoint.Y += 1;
                    // else
                    //     PushyPoint.Y += 1;
                     break;
                 case Pushy.Move.Left:
-                    if (CanIGo(PushyPoint, new System.Drawing.Point(-1, 0), lMove))
+                    if (CanIGo(PushyPoint, new Pushy.Point(-1, 0), lMove))
                         PushyPoint.X -= 1;
                    // else
                    //     PushyPoint.X -= 1;
@@ -335,6 +340,11 @@ namespace Pushy
                 Teleport();
             }
 
+            if (Taboo &&  Feld[PushyPoint.Y, PushyPoint.X] == (int)FeldTyp.Leer )
+            {
+                Feld[PushyPoint.Y, PushyPoint.X] = (int)FeldTyp.Taboo;
+            }
+
 
             InvalidateVisual();
         }
@@ -348,7 +358,7 @@ namespace Pushy
                 {
                     if(Feld[i, j] == (int)FeldTyp.Teleporter && !(PushyPoint.X == j && PushyPoint.Y == i))
                     {
-                        PushyPoint = new System.Drawing.Point(j, i);
+                        PushyPoint = new Pushy.Point(j, i);
                         return;
                     }
                 }
@@ -377,13 +387,18 @@ namespace Pushy
             return true;
         }
 
-        public bool CanIGo(System.Drawing.Point pPoint, System.Drawing.Point pRichtung, Move pMove)
+        public bool CanIGo(Pushy.Point pPoint, Pushy.Point pRichtung, Move pMove)
         {
             if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ( (int)FeldTyp.Leer | (int)FeldTyp.Ziel | (int)FeldTyp.Pfütze | (int)FeldTyp.Teleporter |  (int)FeldTyp.Klecks ) ) > 0)
             {
                 return true;
             }
-            if(MoveObsticle(pPoint, pRichtung, pMove))
+            if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] == (int)FeldTyp.Taboo))
+            {
+                Taboo = true;
+                return true;
+            }
+                if (MoveObsticle(pPoint, pRichtung, pMove))
             {
                 return true;
             }
@@ -393,105 +408,107 @@ namespace Pushy
 
         }
 
-        public bool MoveObsticle(System.Drawing.Point pPoint, System.Drawing.Point pRichtung, Move pMove)
+        public bool MoveObsticle(Pushy.Point pPoint, Pushy.Point pRichtung, Move pMove)
         {
+            bool lResult = false;
+
+            Pushy.Point lKnopf = null;
+            Pushy.Point lKnopfMauer = null;
 
             if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Knopf)) > 0)
             {
+                lKnopf = new Point(pPoint.X + pRichtung.X, pPoint.Y + pRichtung.Y);
+
                 if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] ) == (int)FeldTyp.Knopf)
                     return true;
-                else if((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
-                {
-                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ~(int)FeldTyp.Knopf;
-                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Knopf;
-                    Knopf = false;
-                    return true;
-                }
             }
-            else if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Knopf_Mauer)) > 0 )
+            else if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Knopf_Mauer)) > 0)
             {
-                if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer && Knopf)
+                lKnopfMauer = new Point(pPoint.X + pRichtung.X, pPoint.Y + pRichtung.Y);
+
+                if (Knopf && (Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer)
                     return true;
-                else if((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
-                {
-                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ~(int)FeldTyp.Knopf_Mauer;
-                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Knopf_Mauer;
-                    return true;
-                }
             }
-            else if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Kiste)) == (int)FeldTyp.Kiste)
+           
+            if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Kiste)) == (int)FeldTyp.Kiste)
             {
                 if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
                 {
-                    int tmp = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
-                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X];
-                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = tmp;
-                    return true;
+                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
+                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = (int)FeldTyp.Kiste;
+                    lResult = true;
                 }
                 else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf)
                 {
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += (int)FeldTyp.Kiste;
                     Knopf = true;
-                    return true;
+                    lResult = true;
                 }
                 else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer && Knopf)
                 {
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += (int)FeldTyp.Kiste;
                     Knopf = true;
-                    return true;
+                    lResult = true;
                 }
 
             }
             else if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Kugel)) > 0)
             {
+                int Kugel = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
+                int KugelFarbe =  (Kugel & (int)FeldTyp.Rot) | (Kugel & (int)FeldTyp.Blau) | (Kugel & (int)FeldTyp.Grün);
 
                 if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
                 {
-                    int tmp = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
-                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X];
-                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = tmp;
-                    return true;
+                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
+                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = (int)FeldTyp.Kugel + KugelFarbe;
+                    lResult = true;
                 }
                 else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Pfütze)) > 0 &&
                     ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) > 0))
                 {
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
-                    return true;
+                    lResult = true;
                 }
                 else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Klecks)) > 0)
                 {
                     int Klecks = Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X];
-                    int Farbe = (Klecks & (int)FeldTyp.Rot) | (Klecks & (int)FeldTyp.Blau) | (Klecks & (int)FeldTyp.Grün);
-                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = Farbe + (int)FeldTyp.Kugel;
+                    int KlecksFarbe = (Klecks & (int)FeldTyp.Rot) | (Klecks & (int)FeldTyp.Blau) | (Klecks & (int)FeldTyp.Grün);
+                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] = KlecksFarbe + (int)FeldTyp.Kugel;
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
-                    return true;
+                    lResult = true;
                 }
                 else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf)
                 {
-                    int Klecks = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
-                    int Farbe = (Klecks & (int)FeldTyp.Rot) | (Klecks & (int)FeldTyp.Blau) | (Klecks & (int)FeldTyp.Grün);
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
-                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += Farbe + (int)FeldTyp.Kugel;
+                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += KugelFarbe + (int)FeldTyp.Kugel;
                     Knopf = true;
-                    return true;
+                    lResult = true;
                 }
                 else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] ) == (int)FeldTyp.Knopf_Mauer && Knopf)
                 {
-                    int Klecks = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
-                    int Farbe = (Klecks & (int)FeldTyp.Rot) | (Klecks & (int)FeldTyp.Blau) | (Klecks & (int)FeldTyp.Grün);
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
-                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += Farbe + (int)FeldTyp.Kugel;
+                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += KugelFarbe + (int)FeldTyp.Kugel;
                     Knopf = true;
-                    return true;
+                    lResult = true;
                 }
 
             }
 
 
+            if(lKnopf is not null && Feld[lKnopf.Y, lKnopf.X] == (int)FeldTyp.Leer)
+            {
+                Feld[lKnopf.Y, lKnopf.X] = (int)FeldTyp.Knopf;
+                Knopf = false;
+            }
+            if (lKnopfMauer is not null && Feld[lKnopfMauer.Y, lKnopfMauer.X] == (int)FeldTyp.Leer)
+            {
+                Feld[lKnopfMauer.Y, lKnopfMauer.X] = (int)FeldTyp.Knopf_Mauer;
+            }
 
-            return false;
+
+            return lResult;
         }
 
         public void LoadLevelInfo(LevelInfo LevelInfo)
@@ -507,31 +524,7 @@ namespace Pushy
             PushyLooking = LevelInfo.PushyLooking;
             PushyPoint = LevelInfo.PushyPoint;
             Knopf = false;
-        }
-
-
-        public static Spielfeld Level1
-        {
-            get
-            {
-                LevelInfo LevelInfo = new LevelInfo();
-
-                try
-                {
-                    XmlSerializer xs = new XmlSerializer(typeof(LevelInfo));
-                    MemoryStream memoryStream = new MemoryStream(Pushy.Properties.Resources.Level_1);
-                    XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
-                    LevelInfo = (LevelInfo)xs.Deserialize(memoryStream);
-
-                }
-                catch
-                {
-
-                }
-
-
-                return LevelInfo.ZuSpielfeld();
-            }
+            Taboo = false;
         }
 
         #region Override
@@ -573,4 +566,8 @@ namespace Pushy
         #endregion
 
     }
+
+
+    
+
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -56,24 +55,29 @@ namespace Pushy
         public Move PushyLooking { get; set; }
 
 
-        public static LevelInfo LoadById(int Id)
+        public static LevelInfo? LoadById(int Id)
         {
-            LevelInfo LevelInfo = new LevelInfo();
+            LevelInfo? LevelInfo = new LevelInfo();
 
 
             try
             {
-                var assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetExecutingAssembly();
 
                 string lResult;
-                using (Stream lStream = assembly.GetManifestResourceStream($"Pushy.Level.Level_{Id}.lvl"))
-                using (StreamReader lStreamReader = new StreamReader(lStream))
+                using (Stream? lStream = assembly.GetManifestResourceStream($"Pushy.Level.Level_{Id}.lvl"))
                 {
-                    lResult = lStreamReader.ReadToEnd();
-                }
+                    if (lStream is null)
+                        return null;
 
+                    using (StreamReader lStreamReader = new StreamReader(lStream))
+                    {
+                        lResult = lStreamReader.ReadToEnd();
+                    }
+
+                }
                 using TextReader lTextReader = new StringReader(lResult);
-                LevelInfo = (LevelInfo)new XmlSerializer(typeof(LevelInfo)).Deserialize(lTextReader);
+                LevelInfo = (LevelInfo?)new XmlSerializer(typeof(LevelInfo)).Deserialize(lTextReader);
 
             }
             catch (Exception e)
