@@ -50,6 +50,9 @@ namespace Pushy
         Knopf_Mauer_Kiste =         0b000000010000000010000,
         Taboo =                     0b000000100000000000000,
         Kisten_Punkt =              0b000001000000000000000,
+        Kisten_Punkt_Kugel_Rot =    0b000001000000010100000,
+        Kisten_Punkt_Kugel_Blau =   0b000001000000100100000,
+        Kisten_Punkt_Kugel_Grün =   0b000001000001000100000,
         Kisten_Punkt_Kiste =        0b000001000000000010000,
         Apfel =                     0b000010000000000000000,
 
@@ -144,6 +147,9 @@ namespace Pushy
                 case FeldTyp.Knopf_Mauer_Kugel_Rot:
                     bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Rot_Durchsichtig);
                     break;
+                case FeldTyp.Kisten_Punkt_Kugel_Rot:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Kisten_Punkt, Pushy.Properties.Resources.Kugel_Rot_Durchsichtig);
+                    break;
                 case FeldTyp.Kugel_Blau:
                     bmp = Pushy.Properties.Resources.Kugel_Blau;
                     break;
@@ -153,6 +159,9 @@ namespace Pushy
                 case FeldTyp.Knopf_Mauer_Kugel_Blau:
                     bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Blau_Durchsichtig);
                     break;
+                case FeldTyp.Kisten_Punkt_Kugel_Blau:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Kisten_Punkt, Pushy.Properties.Resources.Kugel_Blau_Durchsichtig);
+                    break;
                 case FeldTyp.Kugel_Grün:
                     bmp = Pushy.Properties.Resources.Kugel_Grün;
                     break;
@@ -161,6 +170,9 @@ namespace Pushy
                     break;
                 case FeldTyp.Knopf_Mauer_Kugel_Grün:
                     bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Grün_Durchsichtig);
+                    break;
+                case FeldTyp.Kisten_Punkt_Kugel_Grün:
+                    bmp = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Kisten_Punkt, Pushy.Properties.Resources.Kugel_Grün_Durchsichtig);
                     break;
                 case FeldTyp.Klecks_Rot:
                     bmp = Pushy.Properties.Resources.Klecks_Rot;
