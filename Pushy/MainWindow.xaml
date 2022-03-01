@@ -30,6 +30,7 @@
             <local:Spielfeld x:Name="Spielfeld" Grid.Column="1" Grid.Row="1" MinWidth="640" MinHeight="384" > </local:Spielfeld>
             
             <TextBox x:Name="LVL" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="654,0,0,0" TextChanged="LVL_TextChanged" >1</TextBox>
+            <Label x:Name="Level_lb" Grid.Column="2" Content="" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
 
 
         </Grid>

@@ -17,38 +17,41 @@ namespace Pushy
 {
     public enum FeldTyp
     {
-        Leer =                      0b0000000000000001,
-        Mauer =                     0b0000000000000010,
-        Ziel =                      0b0000000000000100,
-        Pushy =                     0b0000000000001000,
-        Kiste =                     0b0000000000010000,
-        Kugel =                     0b0000000000100000,
-        Pfütze =                    0b0000000001000000,
-        Rot =                       0b0000000010000000,
-        Pfütze_Rot =                0b0000000011000000,
-        Kugel_Rot =                 0b0000000010100000,
-        Klecks_Rot =                0b0000010010000000,
-        Blau =                      0b0000000100000000,
-        Pfütze_Blau =               0b0000000101000000,
-        Kugel_Blau =                0b0000000100100000,
-        Klecks_Blau =               0b0000010100000000,
-        Grün =                      0b0000001000000000,
-        Pfütze_Grün =               0b0000001001000000,
-        Kugel_Grün =                0b0000001000100000,
-        Klecks_Grün =               0b0000011000000000,
-        Klecks =                    0b0000010000000000,
-        Teleporter =                0b0000100000000000,
-        Knopf =                     0b0001000000000000,
-        Knopf_Kugel_Rot =           0b0001000010100000,
-        Knopf_Kugel_Blau =          0b0001000100100000,
-        Knopf_Kugel_Grün =          0b0001001000100000,
-        Knopf_Kiste =               0b0001000000010000,
-        Knopf_Mauer =               0b0010000000000000,
-        Knopf_Mauer_Kugel_Rot =     0b0010000010100000,
-        Knopf_Mauer_Kugel_Blau =    0b0010000100100000,
-        Knopf_Mauer_Kugel_Grün =    0b0010001000100000,
-        Knopf_Mauer_Kiste =         0b0010000000010000,
-        Taboo =                     0b0100000000000000,
+        Leer =                      0b000000000000000000001,
+        Mauer =                     0b000000000000000000010,
+        Ziel =                      0b000000000000000000100,
+        Pushy =                     0b000000000000000001000,
+        Kiste =                     0b000000000000000010000,
+        Kugel =                     0b000000000000000100000,
+        Pfütze =                    0b000000000000001000000,
+        Rot =                       0b000000000000010000000,
+        Pfütze_Rot =                0b000000000000011000000,
+        Kugel_Rot =                 0b000000000000010100000,
+        Klecks_Rot =                0b000000000010010000000,
+        Blau =                      0b000000000000100000000,
+        Pfütze_Blau =               0b000000000000101000000,
+        Kugel_Blau =                0b000000000000100100000,
+        Klecks_Blau =               0b000000000010100000000,
+        Grün =                      0b000000000001000000000,
+        Pfütze_Grün =               0b000000000001001000000,
+        Kugel_Grün =                0b000000000001000100000,
+        Klecks_Grün =               0b000000000011000000000,
+        Klecks =                    0b000000000010000000000,
+        Teleporter =                0b000000000100000000000,
+        Knopf =                     0b000000001000000000000,
+        Knopf_Kugel_Rot =           0b000000001000010100000,
+        Knopf_Kugel_Blau =          0b000000001000100100000,
+        Knopf_Kugel_Grün =          0b000000001001000100000,
+        Knopf_Kiste =               0b000000001000000010000,
+        Knopf_Mauer =               0b000000010000000000000,
+        Knopf_Mauer_Kugel_Rot =     0b000000010000010100000,
+        Knopf_Mauer_Kugel_Blau =    0b000000010000100100000,
+        Knopf_Mauer_Kugel_Grün =    0b000000010001000100000,
+        Knopf_Mauer_Kiste =         0b000000010000000010000,
+        Taboo =                     0b000000100000000000000,
+        Kisten_Punkt =              0b000001000000000000000,
+        Kisten_Punkt_Kiste =        0b000001000000000010000,
+        Apfel =                     0b000010000000000000000,
 
     }
 
@@ -120,6 +123,7 @@ namespace Pushy
                 case FeldTyp.Kiste:
                 case FeldTyp.Knopf_Kiste:
                 case FeldTyp.Knopf_Mauer_Kiste:
+                case FeldTyp.Kisten_Punkt_Kiste:
                     bmp = Pushy.Properties.Resources.Kiste;
                     break;
                 case FeldTyp.Pfütze_Rot:
@@ -178,6 +182,12 @@ namespace Pushy
                     break;
                 case FeldTyp.Taboo:
                     bmp = Pushy.Properties.Resources.Taboo;
+                    break;
+                case FeldTyp.Kisten_Punkt:
+                    bmp = Pushy.Properties.Resources.Kisten_Punkt;
+                    break;
+                case FeldTyp.Apfel:
+                    bmp = Pushy.Properties.Resources.Apfel;
                     break;
                 default:
                     bmp = Pushy.Properties.Resources.Missing;
@@ -380,7 +390,8 @@ namespace Pushy
                         case (int)FeldTyp.Kugel_Rot:
                         case (int)FeldTyp.Kugel_Grün:
                             return false;
-                            break;
+                        case (int)FeldTyp.Kisten_Punkt:
+                            return false;
                     }
                 }
             }
@@ -414,6 +425,7 @@ namespace Pushy
 
             Pushy.Point lKnopf = null;
             Pushy.Point lKnopfMauer = null;
+            Pushy.Point lKistenPunkt = null;
 
             if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Knopf)) > 0)
             {
@@ -429,7 +441,14 @@ namespace Pushy
                 if (Knopf && (Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer)
                     return true;
             }
-           
+            else if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Kisten_Punkt)) > 0)
+            {
+                lKistenPunkt = new Point(pPoint.X + pRichtung.X, pPoint.Y + pRichtung.Y);
+
+                if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X]) == (int)FeldTyp.Kisten_Punkt)
+                    return true;
+            }
+
             if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Kiste)) == (int)FeldTyp.Kiste)
             {
                 if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
@@ -445,6 +464,12 @@ namespace Pushy
                     Knopf = true;
                     lResult = true;
                 }
+                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Kisten_Punkt)
+                {
+                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
+                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += (int)FeldTyp.Kiste;
+                    lResult = true;
+                }
                 else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer && Knopf)
                 {
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
@@ -457,7 +482,7 @@ namespace Pushy
             else if ((Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] & ((int)FeldTyp.Kugel)) > 0)
             {
                 int Kugel = Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X];
-                int KugelFarbe =  (Kugel & (int)FeldTyp.Rot) | (Kugel & (int)FeldTyp.Blau) | (Kugel & (int)FeldTyp.Grün);
+                int KugelFarbe = (Kugel & (int)FeldTyp.Rot) | (Kugel & (int)FeldTyp.Blau) | (Kugel & (int)FeldTyp.Grün);
 
                 if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] & ((int)FeldTyp.Leer)) > 0)
                 {
@@ -486,18 +511,29 @@ namespace Pushy
                     Knopf = true;
                     lResult = true;
                 }
-                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] ) == (int)FeldTyp.Knopf_Mauer && Knopf)
+                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Knopf_Mauer && Knopf)
                 {
                     Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
                     Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += KugelFarbe + (int)FeldTyp.Kugel;
                     Knopf = true;
                     lResult = true;
                 }
+                else if ((Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X]) == (int)FeldTyp.Kisten_Punkt)
+                {
+                    Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
+                    Feld[pPoint.Y + pRichtung.Y + pRichtung.Y, pPoint.X + pRichtung.X + pRichtung.X] += KugelFarbe + (int)FeldTyp.Kugel;
+                    lResult = true;
+                }
 
+            }
+            else if (Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] == (int)FeldTyp.Apfel)
+            {
+                Feld[pPoint.Y + pRichtung.Y, pPoint.X + pRichtung.X] = (int)FeldTyp.Leer;
+                lResult = true;
             }
 
 
-            if(lKnopf is not null && Feld[lKnopf.Y, lKnopf.X] == (int)FeldTyp.Leer)
+            if (lKnopf is not null && Feld[lKnopf.Y, lKnopf.X] == (int)FeldTyp.Leer)
             {
                 Feld[lKnopf.Y, lKnopf.X] = (int)FeldTyp.Knopf;
                 Knopf = false;
@@ -505,6 +541,10 @@ namespace Pushy
             if (lKnopfMauer is not null && Feld[lKnopfMauer.Y, lKnopfMauer.X] == (int)FeldTyp.Leer)
             {
                 Feld[lKnopfMauer.Y, lKnopfMauer.X] = (int)FeldTyp.Knopf_Mauer;
+            }
+            if (lKistenPunkt is not null && Feld[lKistenPunkt.Y, lKistenPunkt.X] == (int)FeldTyp.Leer)
+            {
+                Feld[lKistenPunkt.Y, lKistenPunkt.X] = (int)FeldTyp.Kisten_Punkt;
             }
 
 

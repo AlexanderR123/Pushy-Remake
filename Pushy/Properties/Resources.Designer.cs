@@ -63,9 +63,29 @@ namespace Pushy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Apfel {
+            get {
+                object obj = ResourceManager.GetObject("Apfel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Kiste {
             get {
                 object obj = ResourceManager.GetObject("Kiste", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Kisten_Punkt {
+            get {
+                object obj = ResourceManager.GetObject("Kisten_Punkt", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

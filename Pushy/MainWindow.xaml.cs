@@ -86,6 +86,7 @@ namespace Pushy
                     break;
             }
 
+            Level_lb.Content = "Level: " + Spielfeld.Level;
 
         }
 
