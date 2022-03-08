@@ -24,12 +24,12 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
-            <Image x:Name="Spielfeld1" Grid.Column="0" Grid.Row="0" >
+            <Image x:Name="Spielfeld1" Grid.Column="1" Grid.Row="1" >
                 <!-- MinWidth="640" MinHeight="384" --></Image>
             
-            <local:Spielfeld x:Name="Spielfeld" Grid.Column="1" Grid.Row="1" MinWidth="640" MinHeight="384" > </local:Spielfeld>
+            <local:Spielfeld x:Name="Spielfeld" Grid.Column="0" Grid.Row="0" MinWidth="640" MinHeight="384" > </local:Spielfeld>
             
-            <TextBox x:Name="LVL" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="654,0,0,0" TextChanged="LVL_TextChanged" >1</TextBox>
+            <TextBox x:Name="LVL" Grid.Row="2" Grid.Column="2" TextChanged="LVL_TextChanged" >1</TextBox>
             <Label x:Name="Level_lb" Grid.Column="2" Content="" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center"/>
 
 

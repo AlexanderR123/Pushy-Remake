@@ -235,6 +235,7 @@ namespace Pushy
                             case (int)FeldTyp.Kiste:
                             case (int)FeldTyp.Knopf_Kiste:
                             case (int)FeldTyp.Knopf_Mauer_Kiste:
+                            case (int)FeldTyp.Kisten_Punkt_Kiste:
                                 image = Pushy.Properties.Resources.Kiste;
                                 break;
                             case (int)FeldTyp.Pfütze_Rot:
@@ -247,25 +248,40 @@ namespace Pushy
                                 image = Pushy.Properties.Resources.Pfütze_Grün;
                                 break;
                             case (int)FeldTyp.Kugel_Rot:
-                            case (int)FeldTyp.Knopf_Kugel_Rot:
                                 image = Pushy.Properties.Resources.Kugel_Rot;
                                 break;
+                            case (int)FeldTyp.Knopf_Kugel_Rot:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Rot_Durchsichtig);
+                                break;
                             case (int)FeldTyp.Knopf_Mauer_Kugel_Rot:
-                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Rot);
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Rot_Durchsichtig);
+                                break;
+                            case (int)FeldTyp.Kisten_Punkt_Kugel_Rot:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Kisten_Punkt, Pushy.Properties.Resources.Kugel_Rot_Durchsichtig);
                                 break;
                             case (int)FeldTyp.Kugel_Blau:
-                            case (int)FeldTyp.Knopf_Kugel_Blau:
                                 image = Pushy.Properties.Resources.Kugel_Blau;
                                 break;
+                            case (int)FeldTyp.Knopf_Kugel_Blau:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Blau_Durchsichtig);
+                                break;
                             case (int)FeldTyp.Knopf_Mauer_Kugel_Blau:
-                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Blau);
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Blau_Durchsichtig);
+                                break;
+                            case (int)FeldTyp.Kisten_Punkt_Kugel_Blau:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Kisten_Punkt, Pushy.Properties.Resources.Kugel_Blau_Durchsichtig);
                                 break;
                             case (int)FeldTyp.Kugel_Grün:
-                            case (int)FeldTyp.Knopf_Kugel_Grün:
                                 image = Pushy.Properties.Resources.Kugel_Grün;
                                 break;
+                            case (int)FeldTyp.Knopf_Kugel_Grün:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Grün_Durchsichtig);
+                                break;
                             case (int)FeldTyp.Knopf_Mauer_Kugel_Grün:
-                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf, Pushy.Properties.Resources.Kugel_Grün);
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Knopf_Mauer_Aktiv, Pushy.Properties.Resources.Kugel_Grün_Durchsichtig);
+                                break;
+                            case (int)FeldTyp.Kisten_Punkt_Kugel_Grün:
+                                image = Pushy.Extension.MergeImages(Pushy.Properties.Resources.Kisten_Punkt, Pushy.Properties.Resources.Kugel_Grün_Durchsichtig);
                                 break;
                             case (int)FeldTyp.Klecks_Rot:
                                 image = Pushy.Properties.Resources.Klecks_Rot;
@@ -284,6 +300,15 @@ namespace Pushy
                                 break;
                             case (int)FeldTyp.Knopf_Mauer:
                                 image = Knopf ? Pushy.Properties.Resources.Knopf_Mauer_Aktiv : Pushy.Properties.Resources.Knopf_Mauer;
+                                break;
+                            case (int)FeldTyp.Taboo:
+                                image = Pushy.Properties.Resources.Taboo;
+                                break;
+                            case (int)FeldTyp.Kisten_Punkt:
+                                image = Pushy.Properties.Resources.Kisten_Punkt;
+                                break;
+                            case (int)FeldTyp.Apfel:
+                                image = Pushy.Properties.Resources.Apfel;
                                 break;
                             default:
                                 image = Pushy.Properties.Resources.Missing;
@@ -403,6 +428,8 @@ namespace Pushy
                         case (int)FeldTyp.Kugel_Grün:
                             return false;
                         case (int)FeldTyp.Kisten_Punkt:
+                            return false;
+                        case (int)FeldTyp.Apfel:
                             return false;
                     }
                 }
